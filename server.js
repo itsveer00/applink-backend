@@ -2,15 +2,17 @@ const express = require('express'); // Import Express.js
 const app = express(); // Create an Express app
 const PORT = 3000; // Define the port number
 
-// Route to handle the app redirection
-app.get('/redirect-to-app', (req, res) => {
+// Root route for app redirection
+app.get('/', (req, res) => {
   const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.chess&hl=en_IN';
-  
+
   // Send a webpage with logic to open the app or redirect to the Play Store
   res.send(`
     <!DOCTYPE html>
     <html lang="en">
       <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Redirecting...</title>
       </head>
       <body>
@@ -21,13 +23,16 @@ app.get('/redirect-to-app', (req, res) => {
           const fallbackUrl = '${playStoreUrl}';
 
           const openApp = () => {
+            // Try to open the app
             window.location.href = deepLink;
+
+            // If the app is not installed, redirect to the Play Store after 3 seconds
             setTimeout(() => {
-              // Redirect to the Play Store if the app isn't installed
               window.location.href = fallbackUrl;
-            }, 3000); // Timeout for fallback
+            }, 3000);
           };
 
+          // Trigger redirection logic
           openApp();
         </script>
       </body>
