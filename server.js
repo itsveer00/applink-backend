@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
       <body>
         <h1>Redirecting to WhatsApp...</h1>
         <script>
-          const deepLink = 'whatsapp://';
+          const deepLink = 'whatsapp://send?text=Hello, this msg prefilled by deeplink';
           const fallbackUrl = '${playStoreUrl}';
 
           const openApp = () => {
@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
               // Redirect to Play Store if WhatsApp is not installed
               setTimeout(() => {
                 window.location.href = fallbackUrl;
-              }, 2000);
+              }, 3000);
             } catch (error) {
               // Fallback in case of an error
               window.location.href = fallbackUrl;
@@ -42,6 +42,7 @@ app.get('/', (req, res) => {
   `);
 });
 
+// Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
