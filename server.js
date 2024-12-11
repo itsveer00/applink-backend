@@ -1,10 +1,9 @@
-const express = require('express'); // Import Express.js
-const app = express(); // Create an Express app
-const PORT = 3000; // Define the port number
+const express = require('express');
+const app = express();
+const PORT = 3000;
 
-// Root route for app redirection
 app.get('/', (req, res) => {
-  const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.chess&hl=en_IN';
+  const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.whatsapp&hl=en_IN';
 
   // Send a webpage with logic to open the app or redirect to the Play Store
   res.send(`
@@ -19,7 +18,7 @@ app.get('/', (req, res) => {
         <h1>Redirecting to the app...</h1>
         <script>
           // Attempt to open the app via deep link
-          const deepLink = 'intent://chess#Intent;package=com.chess;end';
+          const deepLink = 'intent://send#Intent;package=com.whatsapp;scheme=whatsapp;end';
           const fallbackUrl = '${playStoreUrl}';
 
           const openApp = () => {
