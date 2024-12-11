@@ -5,7 +5,6 @@ const PORT = 3000;
 app.get('/', (req, res) => {
   const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.whatsapp&hl=en_IN';
 
-  // Send a webpage with logic to open the app or redirect to the Play Store
   res.send(`
     <!DOCTYPE html>
     <html lang="en">
@@ -15,23 +14,27 @@ app.get('/', (req, res) => {
         <title>Redirecting...</title>
       </head>
       <body>
-        <h1>Redirecting to the app...</h1>
+        <h1>Redirecting to WhatsApp...</h1>
         <script>
-          // Attempt to open the app via deep link
-          const deepLink = 'intent://send#Intent;package=com.whatsapp;scheme=whatsapp;end';
+          const deepLink = 'whatsapp://send';
           const fallbackUrl = '${playStoreUrl}';
 
           const openApp = () => {
-            // Try to open the app
-            window.location.href = deepLink;
+            try {
+              // Open the app via deep link
+              window.location.href = deepLink;
 
-            // If the app is not installed, redirect to the Play Store after 3 seconds
-            setTimeout(() => {
+              // If the app is not installed, redirect to the Play Store after 3 seconds
+              setTimeout(() => {
+                window.location.href = fallbackUrl;
+              }, 3000);
+            } catch (error) {
+              // Fallback to Play Store if deep link fails
               window.location.href = fallbackUrl;
-            }, 3000);
+            }
           };
 
-          // Trigger redirection logic
+          // Trigger redirection
           openApp();
         </script>
       </body>
@@ -39,7 +42,6 @@ app.get('/', (req, res) => {
   `);
 });
 
-// Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
