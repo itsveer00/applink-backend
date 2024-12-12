@@ -39,7 +39,7 @@ app.get('/generate', async (req, res) => {
 
   try {
     await Referral.create({ code, phoneNumber, expiresAt });
-    res.send(`Referral link: http://localhost:${PORT}/referral/${code}`);
+    res.send(`Referral link: https://applink-backend.vercel.app/referral/${code}`);
   } catch (err) {
     res.status(500).send('Error generating referral link');
   }
