@@ -1,0 +1,73 @@
+const express = require('express');
+const app = express();
+const PORT = 3000;
+
+// Simulate a database (you should use an actual database like MongoDB, MySQL, etc.)
+const referralDatabase = {
+  'referralCode123': '1234567890', // Example: { referralCode: phoneNumber }
+};
+
+// Endpoint to serve the referral link
+app.get('/referral/:code', (req, res) => {
+  const referralCode = req.params.code;
+  const phoneNumber = referralDatabase[referralCode]; // Check if the code exists in the database
+
+  if (phoneNumber) {
+    // Valid link
+    res.send(`
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Redirecting...</title>
+        </head>
+        <body>
+          <h1>Welcome! Redirecting to WhatsApp...</h1>
+          <script>
+            const deepLink = 'whatsapp://send?text=Hello, this message is prefilled for you';
+            const fallbackUrl = 'https://play.google.com/store/apps/details?id=com.whatsapp&hl=en_IN';
+
+            const openApp = () => {
+              try {
+                // Attempt to open WhatsApp
+                window.location.href = deepLink;
+
+                // Redirect to Play Store if WhatsApp is not installed
+                setTimeout(() => {
+                  window.location.href = fallbackUrl;
+                }, 3000);
+              } catch (error) {
+                // Fallback in case of an error
+                window.location.href = fallbackUrl;
+              }
+            };
+
+            // Trigger redirection
+            openApp();
+          </script>
+        </body>
+      </html>
+    `);
+  } else {
+    // Invalid link
+    res.status(404).send(`
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Invalid Link</title>
+        </head>
+        <body>
+          <h1>Invalid Referral Link</h1>
+        </body>
+      </html>
+    `);
+  }
+});
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
