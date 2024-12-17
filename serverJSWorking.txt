@@ -50,7 +50,7 @@ app.get('/referral/:code', async (req, res) => {
   const referralCode = req.params.code;
 
   try {
-    const referral = await Referral.findOne({ code: referralCode }); // Try to find the referral code in DB
+    const referral = await Referral.findOne({ code: referralCode });  // Try to find code in DB
 
     if (!referral || new Date() > referral.expiresAt) {
       return res.status(404).send(`
@@ -68,11 +68,7 @@ app.get('/referral/:code', async (req, res) => {
       `);
     }
 
-    // Include the referral code in the WhatsApp message
-    const referralMessage = `Hello, this message is prefilled for youuu. Use this referral code: ${referral.code}`;
-    const deepLink = `whatsapp://send?text=${encodeURIComponent(referralMessage)}`;
-    const fallbackUrl = 'https://play.google.com/store/apps/details?id=com.whatsapp&hl=en_IN';
-
+    // Valid referral link
     res.send(`
       <!DOCTYPE html>
       <html lang="en">
@@ -84,8 +80,8 @@ app.get('/referral/:code', async (req, res) => {
         <body>
           <h1>Welcome! Redirecting to WhatsApp...</h1>
           <script>
-            const deepLink = '${deepLink}';
-            const fallbackUrl = '${fallbackUrl}';
+            const deepLink = 'whatsapp://send?text=Hello, this message is prefilled for you';
+            const fallbackUrl = 'https://play.google.com/store/apps/details?id=com.whatsapp&hl=en_IN';
 
             const openApp = () => {
               try {
